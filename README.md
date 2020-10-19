@@ -1,3 +1,3 @@
 # Node-Hello
 
-hello world using node.js
+Hello world using node.js
