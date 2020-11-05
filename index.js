@@ -18,6 +18,14 @@ app.get('/', function(req, res){
     res.render('index.ejs', {})
 })
 
+app.get('/add', function(req,res){
+    res.render('add.ejs', {})
+})
+
+app.post('/add', function(req,res){
+    console.log("Nome: " + req.body.txtName + " Email: " + req.body.txtEmail);
+})
+
 app.get('/users', function(req, res){
     res.render('users.ejs', { 
         users: [
