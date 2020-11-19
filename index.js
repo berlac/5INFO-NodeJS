@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const User = require('./model/user');
 
 const app = express();
 
@@ -15,7 +16,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', function(req, res){
-    res.render('index.ejs', {})
+    User.find({}).exec(function(err, docs){
+        res.render('index.ejs', { User: docs })
+    })
+})
+
+app.post('/', function(req, res){
+    User.find({ name: new RegExp(req.body.txtSearch, 'gi') }).exec(function(err, docs){
+        res.render('index.ejs', { User: docs })
+    })
 })
 
 app.get('/add', function(req,res){
@@ -23,15 +32,49 @@ app.get('/add', function(req,res){
 })
 
 app.post('/add', function(req,res){
-    console.log("Nome: " + req.body.txtName + " Email: " + req.body.txtEmail);
+    var user = new User({
+        name: req.body.txtName,
+        email: req.body.txtEmail,
+        password: req.body.txtPassword,
+        avatar: req.body.txtAvatar
+    })
+    user.save(function(err){
+        if(err){
+            console.log(err)
+        }else {
+            res.redirect('/');
+        }
+    })
 })
 
-app.get('/users', function(req, res){
-    res.render('users.ejs', { 
-        users: [
-            {name: 'User1', email: 'user1@test.com'},
-            {name: 'User2', email: 'user2@test.com'}
-        ] 
+app.get('/delete/:id', function(req, res){
+    User.findByIdAndDelete(req.params.id, function(err){
+        if(err) {
+            console.log(err)
+        }else {
+            res.redirect('/')
+        }
+    })
+})
+
+app.get('/edit/:id', function(req, res){
+    User.findById(req.params.id, function(err, docs){
+        if (err){
+            console.log(err)
+        } else {
+            res.render('edit.ejs', { User: docs })
+        }
+    })
+})
+
+app.post('/edit/:id', function(req, res){
+    User.findByIdAndUpdate(req.params.id, {
+        name: req.body.txtName,
+        email: req.body.txtEmail,
+        password: req.body.txtPassword,
+        avatar: req.body.txtAvatar
+    }, function(err, docs){
+        res.redirect('/')
     })
 })
 

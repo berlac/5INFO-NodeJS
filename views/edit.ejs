@@ -1,0 +1,10 @@
+<%-include('header.ejs')%>
+    <form method="POST">
+        Id: <input type="text" name="txtId" readonly value="<%=user._id%>"><br>
+        Name: <input type="text" name="txtName" placeholder="Nome" value="<%=user.name%>"><br>
+        Email: <input type="text" name="txtEmail" placeholder="Email" value="<%=user.email%>"><br>
+        Password: <input type="password" name="txtPassword" value="<%=user.password%>"><br>
+        Avatar: <input type="file" name="txtAvatar" value="<%=user.avatar%>"><br>
+        <input type="submit" name="Done">
+    </form>
+<%-include('footer.ejs')%>

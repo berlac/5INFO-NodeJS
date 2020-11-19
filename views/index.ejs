@@ -1,12 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Página Inicial</h1>
-    <p>Seja bem-vindo!</p>
-</body>
-</html>
+<%-include('header.ejs')%>
+    <form method="POST">
+        Search: <input type="text" name="txtSearch" placeholder="Search">
+        <input type="submit" value="Search">
+    </form>
+    <br>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Avatar</th>
+            <th>Delete</th>
+            <th>Edit</th>
+        </tr>
+        <%for(user of User){%>
+        <tr>
+            <td><%=user._id%></td>
+            <td><%=user.name%></td>
+            <td><%=user.email%></td>
+            <td><%=user.avatar%></td>
+            <td>
+                <a href="/delete/<%=user._id%>">Delete</a>
+            </td>
+            <td>
+                <a href="/edit/<%=user._id%>">Edit</a>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+<%-include('footer.ejs')%>
