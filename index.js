@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const User = require('./model/user');
+const upload = require('./config/configMulter')
 
 const app = express();
 
@@ -31,12 +32,12 @@ app.get('/add', function(req,res){
     res.render('add.ejs', {})
 })
 
-app.post('/add', function(req,res){
+app.post('/add', upload.single("txtAvatar"), function(req,res){
     var user = new User({
         name: req.body.txtName,
         email: req.body.txtEmail,
         password: req.body.txtPassword,
-        avatar: req.body.txtAvatar
+        avatar: req.file.filename
     })
     user.save(function(err){
         if(err){
@@ -67,12 +68,12 @@ app.get('/edit/:id', function(req, res){
     })
 })
 
-app.post('/edit/:id', function(req, res){
+app.post('/edit/:id', upload.single("txtAvatar"), function(req, res){
     User.findByIdAndUpdate(req.params.id, {
         name: req.body.txtName,
         email: req.body.txtEmail,
         password: req.body.txtPassword,
-        avatar: req.body.txtAvatar
+        avatar: req.file.filename
     }, function(err, docs){
         res.redirect('/')
     })
